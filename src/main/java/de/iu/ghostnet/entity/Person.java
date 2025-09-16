@@ -17,5 +17,4 @@ public class Person {
     @OneToMany(mappedBy = "salvager")
     private List<GhostNet> assignedNets;
 
-    // getters/setters ...
 }

@@ -1,0 +1,19 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><title>Geisternetze</title></head>
+<body>
+<h1>Alle gemeldeten Netze</h1>
+<a href="/nets/new">Neues Netz melden</a>
+<table border="1">
+  <tr>
+    <th>ID</th><th>Standort</th><th>Größe</th><th>Status</th>
+  </tr>
+  <tr th:each="net : ${nets}">
+    <td th:text="${net.id}"></td>
+    <td th:text="${net.location}"></td>
+    <td th:text="${net.size}"></td>
+    <td th:text="${net.status}"></td>
+  </tr>
+</table>
+</body>
+</html>
