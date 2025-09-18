@@ -3,16 +3,45 @@
 <head><meta charset="utf-8"><title>Geisternetze</title></head>
 <body>
 <h1>Alle gemeldeten Netze</h1>
-<a href="/nets/new">Neues Netz melden</a>
-<table border="1">
+
+<p>
+  <a href="/nets/new">Neues Netz melden</a> |
+  <a href="/nets/open">Noch zu bergen</a>
+</p>
+
+<table border="1" cellpadding="6">
   <tr>
     <th>ID</th><th>Standort</th><th>Größe</th><th>Status</th>
+    <th>Bergende Person</th><th>Aktionen</th>
   </tr>
   <tr th:each="net : ${nets}">
     <td th:text="${net.id}"></td>
     <td th:text="${net.location}"></td>
     <td th:text="${net.size}"></td>
     <td th:text="${net.status}"></td>
+    <td th:text="${net.salvager != null ? net.salvager.name : '-'}"></td>
+    <td>
+      <!-- Claim-Formular (zeigt nur, wenn offen) -->
+      <form th:if="${net.status.name() == 'GEMELDET' and net.salvager == null}"
+            th:action="@{|/nets/${net.id}/claim|}" method="post" style="display:inline;">
+        Name: <input name="name" required size="8"/>
+        Tel: <input name="phone" required size="8"/>
+        <button type="submit">Ich berge das</button>
+      </form>
+
+      <!-- Geborgen -->
+      <form th:if="${net.status.name() == 'BERGUNG_BEVORSTEHEND'}"
+            th:action="@{|/nets/${net.id}/recovered|}" method="post" style="display:inline;">
+        <button type="submit">Geborgen</button>
+      </form>
+
+      <!-- Verschollen (Name/Tel Pflicht) -->
+      <form th:action="@{|/nets/${net.id}/missing|}" method="post" style="display:inline;">
+        <input name="name" placeholder="Name" required size="7"/>
+        <input name="phone" placeholder="Tel." required size="7"/>
+        <button type="submit">Verschollen</button>
+      </form>
+    </td>
   </tr>
 </table>
 </body>

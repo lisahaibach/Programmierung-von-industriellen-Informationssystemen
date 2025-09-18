@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface GhostNetRepository extends JpaRepository<GhostNet, Long> {
     List<GhostNet> findByStatusAndSalvagerIsNull(Status status);
+    List<GhostNet> findByStatusAndSalvagerIsNull(Status status);
 }
