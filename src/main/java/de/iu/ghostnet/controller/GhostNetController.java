@@ -26,7 +26,7 @@ public class GhostNetController {
         return "nets";
     }
 
-    // Liste: noch zu bergen (GEMELDET + kein Salvager)
+    // Liste: noch zu bergen
     @GetMapping("/open")
     public String openList(Model model) {
         model.addAttribute("nets",

@@ -1,48 +1,52 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="utf-8"><title>Geisternetze</title></head>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/><title>Geisternetze</title>
+  <link rel="stylesheet" href="/styles.css"/>
+</head>
 <body>
-<h1>Alle gemeldeten Netze</h1>
+  <div th:replace="~{_nav :: nav}"></div>
+  <div class="container">
+    <div class="card">
+      <h1>Alle Geisternetze</h1>
+      <table class="table">
+        <tr>
+          <th>ID</th><th>Standort</th><th>Größe</th><th>Status</th><th>Bergende Person</th><th>Aktionen</th>
+        </tr>
+        <tr th:each="net : ${nets}">
+          <td th:text="${net.id}"></td>
+          <td th:text="${net.location}"></td>
+          <td th:text="${net.size}"></td>
+          <td>
+            <span th:class="'badge ' + (${net.status.name()=='GEMELDET'} ? 'gray' :
+                                        ${net.status.name()=='BERGUNG_BEVORSTEHEND'} ? 'blue' :
+                                        ${net.status.name()=='GEBORGEN'} ? 'green' :
+                                        'amber')"
+                  th:text="${net.status}"></span>
+          </td>
+          <td th:text="${net.salvager != null ? net.salvager.name : '-'}"></td>
+          <td class="row-actions">
+            <form th:if="${net.status.name() == 'GEMELDET' and net.salvager == null}"
+                  th:action="@{|/nets/${net.id}/claim|}" method="post">
+              <input class="input" name="name" placeholder="Name" required/>
+              <input class="input" name="phone" placeholder="Telefon" required/>
+              <button class="btn accent" type="submit">Ich berge das</button>
+            </form>
 
-<p>
-  <a href="/nets/new">Neues Netz melden</a> |
-  <a href="/nets/open">Noch zu bergen</a>
-</p>
+            <form th:if="${net.status.name() == 'BERGUNG_BEVORSTEHEND'}"
+                  th:action="@{|/nets/${net.id}/recovered|}" method="post">
+              <button class="btn blue" type="submit">Geborgen</button>
+            </form>
 
-<table border="1" cellpadding="6">
-  <tr>
-    <th>ID</th><th>Standort</th><th>Größe</th><th>Status</th>
-    <th>Bergende Person</th><th>Aktionen</th>
-  </tr>
-  <tr th:each="net : ${nets}">
-    <td th:text="${net.id}"></td>
-    <td th:text="${net.location}"></td>
-    <td th:text="${net.size}"></td>
-    <td th:text="${net.status}"></td>
-    <td th:text="${net.salvager != null ? net.salvager.name : '-'}"></td>
-    <td>
-      <!-- Claim-Formular (zeigt nur, wenn offen) -->
-      <form th:if="${net.status.name() == 'GEMELDET' and net.salvager == null}"
-            th:action="@{|/nets/${net.id}/claim|}" method="post" style="display:inline;">
-        Name: <input name="name" required size="8"/>
-        Tel: <input name="phone" required size="8"/>
-        <button type="submit">Ich berge das</button>
-      </form>
-
-      <!-- Geborgen -->
-      <form th:if="${net.status.name() == 'BERGUNG_BEVORSTEHEND'}"
-            th:action="@{|/nets/${net.id}/recovered|}" method="post" style="display:inline;">
-        <button type="submit">Geborgen</button>
-      </form>
-
-      <!-- Verschollen (Name/Tel Pflicht) -->
-      <form th:action="@{|/nets/${net.id}/missing|}" method="post" style="display:inline;">
-        <input name="name" placeholder="Name" required size="7"/>
-        <input name="phone" placeholder="Tel." required size="7"/>
-        <button type="submit">Verschollen</button>
-      </form>
-    </td>
-  </tr>
-</table>
+            <form th:action="@{|/nets/${net.id}/missing|}" method="post">
+              <input class="input" name="name" placeholder="Name" required/>
+              <input class="input" name="phone" placeholder="Telefon" required/>
+              <button class="btn danger" type="submit">Verschollen</button>
+            </form>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </body>
 </html>

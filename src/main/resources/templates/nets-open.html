@@ -1,23 +1,30 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="utf-8"><title>Noch zu bergen</title></head>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/><title>Noch zu bergen</title>
+  <link rel="stylesheet" href="/styles.css"/>
+</head>
 <body>
-<h1>Noch zu bergen</h1>
-<p><a href="/nets">Alle Netze</a></p>
-<table border="1" cellpadding="6">
-  <tr><th>ID</th><th>Standort</th><th>Größe</th><th>Aktion</th></tr>
-  <tr th:each="net : ${nets}">
-    <td th:text="${net.id}"></td>
-    <td th:text="${net.location}"></td>
-    <td th:text="${net.size}"></td>
-    <td>
-      <form th:action="@{|/nets/${net.id}/claim|}" method="post">
-        Name: <input name="name" required size="8"/>
-        Tel: <input name="phone" required size="8"/>
-        <button type="submit">Ich berge das</button>
-      </form>
-    </td>
-  </tr>
-</table>
+  <div th:replace="~{_nav :: nav}"></div>
+  <div class="container">
+    <div class="card">
+      <h1>Noch zu bergen</h1>
+      <table class="table">
+        <tr><th>ID</th><th>Standort</th><th>Größe</th><th>Aktion</th></tr>
+        <tr th:each="net : ${nets}">
+          <td th:text="${net.id}"></td>
+          <td th:text="${net.location}"></td>
+          <td th:text="${net.size}"></td>
+          <td>
+            <form th:action="@{|/nets/${net.id}/claim|}" method="post" class="row-actions">
+              <input class="input" name="name" placeholder="Name" required/>
+              <input class="input" name="phone" placeholder="Telefon" required/>
+              <button class="btn accent" type="submit">Ich berge das</button>
+            </form>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </body>
 </html>

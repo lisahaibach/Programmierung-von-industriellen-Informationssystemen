@@ -15,11 +15,11 @@ public class GhostNet {
     @Enumerated(EnumType.STRING)
     private Status status = Status.GEMELDET;
 
-    // Daten der meldenden Person (optional = anonym)
+    // Daten der meldenden Person
     private String reporterName;
     private String reporterPhone;
 
-    // max. eine bergende Person (optional)
+    // max. eine bergende Person 
     @ManyToOne
     private Person salvager;
 
